@@ -1,10 +1,27 @@
 <template>
-  <form @submit.prevent="register">
-    <input type="text" v-model="name" placeholder="name" required />
-    <input type="email" v-model="email" placeholder="email" required />
-    <input type="password" v-model="password" placeholder="password" required />
-    <button type="submit">送信</button>
-  </form>
+  <div class="auth__container">
+    <form @submit.prevent="register">
+      <validation-observer ref="obs" v-slot="ObserverProps">
+        <validation-provider v-slot="{ errors }" rules="required|min:4|max:255">
+          <input v-model="name" type="text" name="名前" placeholder="名前" />
+          <div class="error">{{ errors[0] }}</div>
+        </validation-provider>
+        <validation-provider v-slot="{ errors }" rules="required|email">
+          <input v-model="email" type="email" name="メールアドレス" placeholder="メールアドレス"/>
+          <div class="error">{{ errors[0] }}</div>
+        </validation-provider>
+        <validation-provider v-slot="{ errors }" vid="passwordConfirm" rules="required|min:8|alpha_dash">
+          <input v-model="password" type="password" name="パスワード" placeholder="パスワード"/>
+          <div class="error">{{ errors[0] }}</div>
+        </validation-provider>
+        <validation-provider v-slot="{ errors }" rules="confirmed:passwordConfirm">
+          <input v-model="passwordConfirm" type="password" name="確認用パスワード" placeholder="確認用パスワード"/>
+          <div class="error">{{ errors[0] }}</div>
+        </validation-provider>
+        <button type="submit" :disabled="ObserverProps.invalid || !ObserverProps.validated">会員登録</button>
+      </validation-observer>
+    </form>
+  </div>
 </template>
 
 <script>
