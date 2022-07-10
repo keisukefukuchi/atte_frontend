@@ -2,14 +2,22 @@
   <header class="header">
     <h1 class="header__title">Atte</h1>
     <nav class="header__nav">
-      <ul class="nav__menu">
-        <li class="nav__menu-list" v-if="!$auth.loggedIn">
+      <ul class="nav__menu" v-if="!$auth.loggedIn">
+        <li class="nav__menu-list">
           <NuxtLink to="/register">Register</NuxtLink>
         </li>
-        <li class="nav__menu-list" v-if="!$auth.loggedIn">
+        <li class="nav__menu-list">
           <NuxtLink to="/login">Login</NuxtLink>
         </li>
-        <li class="nav__menu-list" v-else>
+      </ul>
+      <ul class="nav__menu" v-else>
+        <li class="nav__menu-list">
+          <a>ホーム</a>
+        </li>
+        <li class="nav__menu-list">
+          <a>日付一覧</a>
+        </li>
+        <li class="nav__menu-list">
           <a @click="logout">Logout</a>
         </li>
       </ul>
