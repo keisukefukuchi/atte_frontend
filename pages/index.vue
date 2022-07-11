@@ -3,7 +3,7 @@
     <p v-if="$auth.loggedIn">Name:{{ $auth.user }}</p>
 
     <button @click="attendanceStart">勤務開始</button>
-    <button>勤務終了</button>
+    <button @click="attendanceEnd">勤務終了</button>
     <button>休憩開始</button>
     <button>休憩終了</button>
   </div>
@@ -13,7 +13,7 @@
 export default {
   data() {
     return {
-      attendanceLists:[],
+      attendanceLists: [],
     }
   },
   methods: {
@@ -27,6 +27,18 @@ export default {
          'user_id': this.$auth.user.id,
       };
       const resData = await this.$axios.post("http://localhost:8000/api/auth/attendance",sendData);
+      console.log(resData);
+      this.attendanceGet();
+    },
+    async attendanceEnd() {
+      const user_id = this.$auth.user.id;
+      const today = this.$dayjs().format('YYYY-MM-DD');
+      const attendance = this.attendanceLists.find(function (element) {
+        if(element.user_id == user_id && element.date == today) {
+          return element;
+        }
+      });
+      const resData = await this.$axios.put("http://localhost:8000/api/auth/attendance/"+ attendance.id);
       console.log(resData);
       this.attendanceGet();
     },
