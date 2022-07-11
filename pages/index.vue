@@ -4,7 +4,7 @@
 
     <button @click="attendanceStart">勤務開始</button>
     <button @click="attendanceEnd">勤務終了</button>
-    <button>休憩開始</button>
+    <button @click="restStart">休憩開始</button>
     <button>休憩終了</button>
   </div>
 </template>
@@ -39,6 +39,14 @@ export default {
         }
       });
       const resData = await this.$axios.put("http://localhost:8000/api/auth/attendance/"+ attendance.id);
+      console.log(resData);
+      this.attendanceGet();
+    },
+    async restStart() {
+      const sendData = {
+         'user_id': this.$auth.user.id,
+      };
+      const resData = await this.$axios.post("http://localhost:8000/api/auth/rest",sendData);
       console.log(resData);
       this.attendanceGet();
     },
