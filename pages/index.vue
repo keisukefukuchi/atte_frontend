@@ -3,9 +3,11 @@
     <p v-if="$auth.loggedIn">Name:{{ $auth.user }}</p>
 
     <button @click="attendanceStart">勤務開始</button>
+    <p>勤務開始</p>
     <button @click="attendanceEnd">勤務終了</button>
-    <button @click="restStart">休憩開始</button>
-    <button @click="restEnd">休憩終了</button>
+    <button v-if="display = !display" @click="restStart">休憩開始</button>
+    <p v-else>B</p>
+    <button v-if="display" @click="restEnd">休憩終了</button>
   </div>
 </template>
 
@@ -14,6 +16,7 @@ export default {
   data() {
     return {
       attendanceLists: [],
+      display: true,
     }
   },
   methods: {
@@ -66,6 +69,22 @@ export default {
       const resData = await this.$axios.put("http://localhost:8000/api/auth/rest/"+ rest.id);
       console.log(resData);
       this.attendanceGet();
+    },
+  },
+  computed: {
+    attendanceCheck: function() {
+      var user_id = this.$auth.user.id;
+      var today = this.$dayjs().format('YYYY-MM-DD');
+      this.attendanceLists.find(function (element) {
+        if(element.user_id == user_id && element.date == today) {
+          consoloe.log("a");
+          console.log(element);
+          console.log(element.end_time);
+          return element.end_time == null;
+        }else {
+          consoloe.log("b");
+        }
+      });
     },
   },
   created() {
